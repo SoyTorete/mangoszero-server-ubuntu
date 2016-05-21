@@ -8,5 +8,5 @@ WantedBy=multi-user.target
 [Service]
 User=mangos
 Group=mangos
-ExecStart=/usr/bin/mangosd
+ExecStart=/usr/bin/mangosd -c /etc/mangosd.conf
 Restart=on-failure

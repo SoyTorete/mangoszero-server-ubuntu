@@ -8,5 +8,5 @@ WantedBy=multi-user.target
 [Service]
 User=mangos
 Group=mangos
-ExecStart=/usr/bin/realmd
+ExecStart=/usr/bin/realmd -c /etc/realmd.conf
 Restart=on-failure
