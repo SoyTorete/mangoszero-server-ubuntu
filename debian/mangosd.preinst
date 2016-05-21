@@ -1,0 +1,21 @@
+#!/bin/sh
+
+if ! getent group mangos >/dev/null; then
+	addgroup --system mangos >/dev/null
+fi
+
+if ! getent passwd mangos >/dev/null; then
+	adduser \
+	  --system \
+          --disabled-login \
+	  --ingroup mangos \
+	  --no-create-home \
+	  --home /nonexistent \
+	  --gecos "Mangos" \
+	  --shell /bin/false \
+	  mangos >/dev/null
+fi
+
+
+mkdir -p /var/log/mangos
+chown mangos:mangos /var/log/mangos

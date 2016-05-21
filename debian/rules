@@ -1,0 +1,70 @@
+#!/usr/bin/make -f
+
+
+BUILD_DIR            = $(CURDIR)/build
+GIT_URL              = https://github.com/mangoszero/server.git
+DEB_SOURCE           = $(shell dpkg-parsechangelog | grep Source: | sed -e 's/Source: //')
+DEB_VERSION          = $(shell dpkg-parsechangelog | grep Version: | sed -e 's/Version: //')
+DEB_UPSTREAM_COMMIT  = $(shell echo $(DEB_VERSION) | sed -rn 's/.*git([^-]*).*/\1/p')
+DEB_UPSTREAM_VERSION = $(shell echo $(DEB_VERSION) | sed -e 's/-[^-]*$$//')
+DEB_INSTALL_DIR      = $(CURDIR)/debian/$(DEB_SOURCE)
+
+ifndef WOW_CLIENT_DIR
+    $(error WOW_CLIENT_DIR is undefined)
+endif
+
+%:
+	dh $@ --builddirectory=$(BUILD_DIR) --parallel
+
+override_dh_auto_configure:
+	dh_auto_configure -- -DACE_USE_EXTERNAL=1
+
+remove_data:
+ifeq (,$(findstring skipdata,$(DEB_BUILD_OPTIONS)))
+	$(RM) -r "$(WOW_CLIENT_DIR)/maps"
+	$(RM) -r "$(WOW_CLIENT_DIR)/mmaps"
+	$(RM) -r "$(WOW_CLIENT_DIR)/vmaps"
+	$(RM) -r "$(WOW_CLIENT_DIR)/dbc"
+	$(RM) -r "$(WOW_CLIENT_DIR)/Buildings"
+endif
+
+override_dh_install:
+	dh_install
+ifeq (,$(findstring skipdata,$(DEB_BUILD_OPTIONS)))
+	ln -fs $(CURDIR)/debian/tmp/usr/bin/tools/* "$(WOW_CLIENT_DIR)"
+	if [ ! -e "$(WOW_CLIENT_DIR)/dbc" ]; then \
+		cd "$(WOW_CLIENT_DIR)" && ./map-extractor; \
+	fi
+	if [ ! -e "$(WOW_CLIENT_DIR)/Buildings" ] || [ ! -e "$(WOW_CLIENT_DIR)/maps" ]; then \
+		cd "$(WOW_CLIENT_DIR)" && ./vmap-extractor; \
+	fi
+	if [ ! -e "$(WOW_CLIENT_DIR)/mmaps" ] || [ ! -e "$(WOW_CLIENT_DIR)/vmaps" ]; then \
+		cd "$(WOW_CLIENT_DIR)" && \
+			sh ./MoveMapGen.sh 4; \
+	fi
+	# Required dirs: maps mmaps vmaps dbc
+	for i in `find debian/tmp/usr/bin/tools -type f -printf "%f\n"`; do \
+		$(RM) -v "$(WOW_CLIENT_DIR)/$$i"; \
+	done
+	mkdir -pv $(CURDIR)/debian/mangos-data/usr/lib/mangos/data
+	cp -rv "$(WOW_CLIENT_DIR)/dbc" $(CURDIR)/debian/mangos-data/usr/lib/mangos/data
+	cp -rv "$(WOW_CLIENT_DIR)/maps" $(CURDIR)/debian/mangos-data/usr/lib/mangos/data
+	cp -rv "$(WOW_CLIENT_DIR)/mmaps" $(CURDIR)/debian/mangos-data/usr/lib/mangos/data
+	cp -rv "$(WOW_CLIENT_DIR)/vmaps" $(CURDIR)/debian/mangos-data/usr/lib/mangos/data
+endif
+
+override_dh_auto_clean:
+	$(RM) -v dep/libmpq/config.h
+	$(RM) -rv $(BUILD_DIR)
+
+get-orig-source:
+	TMPDIR=`mktemp -d -t`; \
+	git clone $(GIT_URL) $$TMPDIR; \
+	cd $$TMPDIR; \
+	git checkout $(DEB_UPSTREAM_COMMIT); \
+	git submodule update --init; \
+	tar -czvf $(CURDIR)/mangoszero.orig.tar.gz .; \
+	cd $(CURDIR); \
+	dpt repack.sh --upstream-version $(DEB_UPSTREAM_VERSION) mangoszero.orig.tar.gz ; \
+	$(RM) mangoszero.orig.tar.gz ; \
+	$(RM) -r $$TMPDIR

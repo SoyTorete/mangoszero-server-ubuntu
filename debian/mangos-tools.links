@@ -1,0 +1,3 @@
+usr/lib/mangos-tools/tools/map-extractor       usr/bin/map-extractor
+usr/lib/mangos-tools/tools/movemap-generator   usr/bin/movemap-generator
+usr/lib/mangos-tools/tools/vmap-extractor      usr/bin/vmap-extractor

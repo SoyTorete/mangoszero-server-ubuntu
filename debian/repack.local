@@ -1,0 +1,30 @@
+SUFFIX=''
+
+
+rm .git
+rm .gitignore
+rm .gitattributes
+rm .gitmodules
+
+rm .travis.sh
+rm .travis.yml
+rm appveyor.yml
+rm server.tar.gz
+
+rm win
+rm dep/acelite
+rm dep/lib
+rm dep/include
+rm contrib/dbcformat/DBC*.exe
+rm contrib/dbcEditer/pjDbcEditer.exe
+rm contrib/dbcEditer/bin/pjDbcEditer.exe
+rm dep/fastmm/lib/link.exe
+rm dep/fastmm/lib/lib.exe
+rm src/modules/Eluna/docs/ElunaDoc/static/jquery.js
+
+rm dep/.git
+rm src/realmd/.git
+rm src/modules/Eluna/.git
+rm src/modules/SD3/.git
+rm contrib/dbdocs_editor/.git
+rm src/tools/Extractor_projects/.git

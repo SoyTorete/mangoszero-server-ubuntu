@@ -1,0 +1,72 @@
+Source: mangoszero
+Section: games
+Priority: optional
+Maintainer: Onur Aslan <onur@onur.im>
+Build-Depends: debhelper (>=9),
+ cmake,
+ libmysqlclient-dev,
+ libace-dev,
+ zlib1g-dev,
+ libssl-dev,
+ libbz2-dev
+Standards-Version: 3.9.8
+Homepage: https://github.com/mangoszero/server
+#Vcs-Git: git://anonscm.debian.org/collab-maint/mangoszero.git
+#Vcs-Browser: https://anonscm.debian.org/cgit/collab-maint/mangoszero.git
+
+Package: mangoszero
+Architecture: all
+Depends: ${misc:Depends},
+ mangosd (>= ${source:Version}),
+ mangosd (<< ${source:Version}.1~),
+ realmd (>= ${source:Version}),
+ realmd (<< ${source:Version}.1~),
+ mangos-tools (>= ${source:Version}),
+ mangos-tools (<< ${source:Version}.1~)
+Description: vanilla World of Warcraft server emulator suite
+ Vanilla World of Warcraft server emulator
+
+Package: mangosd
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends},
+ mangos-data (>= ${source:Version}),
+ mangos-data (<< ${source:Version}.1~),
+ mangoszero-database (>= 21+20160430+gite60a39f),
+ mangoszero-database (<< 21+20160430+gite60a39f.1~)
+Recommends: realmd
+Suggests: mangos-tools
+Description: vanilla World of Warcraft server emulator
+ Vanilla World of Warcraft server emulator
+ .
+ This package contains mangosd game server.
+
+Package: mangos-data
+Architecture: all
+Depends: ${misc:Depends},
+ mangosd (>= ${source:Version}),
+ mangosd (<< ${source:Version}.1~)
+Description: mangos data
+ Data files for mangos
+ .
+ This package contains following data files for pathfinding:
+ .
+ * dbc
+ * maps
+ * mmaps
+ * vmaps
+
+Package: realmd
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends},
+ mangoszero-database (>= 21+20160430+gite60a39f),
+ mangoszero-database (<< 21+20160430+gite60a39f.1~)
+Recommends: mangosd
+Description: realmd for mangos
+ realmd for mangos
+
+Package: mangos-tools
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Provides: map-extractor, vmap-extractor, movemap-generator
+Description: tools for mangos
+ Tools for mangos

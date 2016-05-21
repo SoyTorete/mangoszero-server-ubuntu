@@ -1,0 +1,12 @@
+[Unit]
+Description=Mangos World of Warcraft Game Server
+After=network.target mysql.service
+
+[Install]
+WantedBy=multi-user.target
+
+[Service]
+User=mangos
+Group=mangos
+ExecStart=/usr/bin/mangosd
+Restart=on-failure

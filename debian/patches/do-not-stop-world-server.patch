@@ -1,0 +1,11 @@
+--- a/src/mangosd/Comm/CliRunnable.cpp
++++ b/src/mangosd/Comm/CliRunnable.cpp
+@@ -648,7 +648,7 @@
+         }
+         else if (feof(stdin))
+         {
+-            World::StopNow(SHUTDOWN_EXIT_CODE);
++            break;
+         }
+     }
+ 
