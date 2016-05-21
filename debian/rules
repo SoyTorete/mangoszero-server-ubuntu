@@ -19,15 +19,6 @@ endif
 override_dh_auto_configure:
 	dh_auto_configure -- -DACE_USE_EXTERNAL=1
 
-remove_data:
-ifeq (,$(findstring skipdata,$(DEB_BUILD_OPTIONS)))
-	$(RM) -r "$(WOW_CLIENT_DIR)/maps"
-	$(RM) -r "$(WOW_CLIENT_DIR)/mmaps"
-	$(RM) -r "$(WOW_CLIENT_DIR)/vmaps"
-	$(RM) -r "$(WOW_CLIENT_DIR)/dbc"
-	$(RM) -r "$(WOW_CLIENT_DIR)/Buildings"
-endif
-
 override_dh_install:
 	dh_install
 ifeq (,$(findstring skipdata,$(DEB_BUILD_OPTIONS)))
@@ -53,7 +44,14 @@ ifeq (,$(findstring skipdata,$(DEB_BUILD_OPTIONS)))
 	cp -rv "$(WOW_CLIENT_DIR)/vmaps" $(CURDIR)/debian/mangoszero-data/usr/lib/mangoszero/data
 endif
 
-override_dh_auto_clean: remove_data
+override_dh_auto_clean:
+ifeq (,$(findstring skipdata,$(DEB_BUILD_OPTIONS)))
+	$(RM) -r "$(WOW_CLIENT_DIR)/maps"
+	$(RM) -r "$(WOW_CLIENT_DIR)/mmaps"
+	$(RM) -r "$(WOW_CLIENT_DIR)/vmaps"
+	$(RM) -r "$(WOW_CLIENT_DIR)/dbc"
+	$(RM) -r "$(WOW_CLIENT_DIR)/Buildings"
+endif
 	$(RM) -v dep/libmpq/config.h
 	$(RM) -rv $(BUILD_DIR)
 
