@@ -19,3 +19,8 @@ fi
 
 mkdir -p /var/log/mangos
 chown mangos:mangos /var/log/mangos
+
+
+#DEBHELPER#
+
+exit 0

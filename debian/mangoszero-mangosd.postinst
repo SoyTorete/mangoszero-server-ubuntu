@@ -26,6 +26,7 @@ case "$1" in
             sed -i 's/LogsDir\(.*\)= ".*"/LogsDir\1= "\/var\/log\/mangos"/' /etc/mangosd.conf
             sed -i 's/WorldDatabaseInfo\(.*\)= ".*"/WorldDatabaseInfo\1= "127.0.0.1;3306;mangos;mangos;mangos0"/' /etc/mangosd.conf
             sed -i 's/CharacterDatabaseInfo\(.*\)= ".*"/CharacterDatabaseInfo\1= "127.0.0.1;3306;mangos;mangos;character0"/' /etc/mangosd.conf
+            sed -i 's/Eluna.ScriptPath\(.*\)= ".*"/Eluna.ScriptPath\1= "/usr/lib/mangoszero/scripts"/' /etc/mangosd.conf
         fi
         if [ ! -e /etc/ahbot.conf ]; then
             gzip -dc /usr/share/doc/mangosd/examples/ahbot.conf.dist.gz > /etc/ahbot.conf

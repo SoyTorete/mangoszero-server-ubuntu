@@ -46,14 +46,14 @@ ifeq (,$(findstring skipdata,$(DEB_BUILD_OPTIONS)))
 	for i in `find debian/tmp/usr/bin/tools -type f -printf "%f\n"`; do \
 		$(RM) -v "$(WOW_CLIENT_DIR)/$$i"; \
 	done
-	mkdir -pv $(CURDIR)/debian/mangos-data/usr/lib/mangos/data
-	cp -rv "$(WOW_CLIENT_DIR)/dbc" $(CURDIR)/debian/mangos-data/usr/lib/mangos/data
-	cp -rv "$(WOW_CLIENT_DIR)/maps" $(CURDIR)/debian/mangos-data/usr/lib/mangos/data
-	cp -rv "$(WOW_CLIENT_DIR)/mmaps" $(CURDIR)/debian/mangos-data/usr/lib/mangos/data
-	cp -rv "$(WOW_CLIENT_DIR)/vmaps" $(CURDIR)/debian/mangos-data/usr/lib/mangos/data
+	mkdir -pv $(CURDIR)/debian/mangos-data/usr/lib/mangoszero/data
+	cp -rv "$(WOW_CLIENT_DIR)/dbc" $(CURDIR)/debian/mangoszero-data/usr/lib/mangoszero/data
+	cp -rv "$(WOW_CLIENT_DIR)/maps" $(CURDIR)/debian/mangoszero-data/usr/lib/mangoszero/data
+	cp -rv "$(WOW_CLIENT_DIR)/mmaps" $(CURDIR)/debian/mangoszero-data/usr/lib/mangoszero/data
+	cp -rv "$(WOW_CLIENT_DIR)/vmaps" $(CURDIR)/debian/mangoszero-data/usr/lib/mangoszero/data
 endif
 
-override_dh_auto_clean:
+override_dh_auto_clean: remove_data
 	$(RM) -v dep/libmpq/config.h
 	$(RM) -rv $(BUILD_DIR)
 
